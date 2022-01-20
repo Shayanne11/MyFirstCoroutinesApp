@@ -1,15 +1,13 @@
 package com.example.myfirstcouroutinesapp.ui.main
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import com.example.myfirstcouroutinesapp.R
 import com.example.myfirstcouroutinesapp.databinding.MainFragmentBinding
+import kotlinx.coroutines.*
 
 class MainFragment : Fragment(R.layout.main_fragment) {
 
@@ -17,12 +15,21 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
 
+    // meu escopo de coroutines
+    // dispatchers faz com que o código dela seja postado na Main Thread
+    // ( nela há uma fila de operações para rodar nela)
+    private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
+
+    // criando o Job
+    private var job :Job? = null
+
+    // variável que irá alterar o contador
+    var num = 0
+
+
     companion object {
         fun newInstance() = MainFragment()
     }
-
-    private lateinit var viewModel: MainViewModel
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,31 +39,43 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // update ->  looping (parar quando clicar stop  Job e dar um cancel no coroutines)  : delay ( 500) fazer update
+
         binding.buttonStart.setOnClickListener {
-            //TODO
+            // start contador ->
+            //updated
+
+            job = coroutineScope.launch {
+               while (true) {
+                   binding.counterClock.text = num.toString()
+                   num++
+                   delay(500)
+                   //start
+                   //update
+               }
+            }
         }
 
         binding.buttonStop.setOnClickListener {
-            //TODO
+           // parar o contador
+            job?.cancel()
+
         }
 
-        //TODO
-        binding.counterClock
     }
 
     // to avoid memory leaks
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+       // caso a coroutines tivesse mais de um job,
+    // deveriamos cancelar todos os jobs antes da view ser destruida,
+    // e para isso cancelaríamos a coroutines onde eles estão:
+      //  coroutineScope.coroutineContext.cancelChildren()
     }
 
 }
