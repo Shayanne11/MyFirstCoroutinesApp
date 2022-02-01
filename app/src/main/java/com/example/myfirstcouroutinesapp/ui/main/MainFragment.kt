@@ -64,6 +64,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
            // parar o contador
             job?.cancel()
 
+
         }
 
     }
@@ -77,5 +78,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     // e para isso cancelaríamos a coroutines onde eles estão:
       //  coroutineScope.coroutineContext.cancelChildren()
     }
+
+    // tentando add as alteraçoes no github
 
 }
