@@ -79,6 +79,6 @@ class MainFragment : Fragment(R.layout.main_fragment) {
       //  coroutineScope.coroutineContext.cancelChildren()
     }
 
-    // tentando add as alteraçoes no github
+    // git?
 
 }
