@@ -62,7 +62,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
         binding.buttonStop.setOnClickListener {
            // parar o contador
-            //testing git hub
+            //testing git
             job?.cancel()
 
 
